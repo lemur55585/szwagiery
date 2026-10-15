@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Gier - Szwagiery.pl</title>
+    <meta name="description" content="Katalog i wyszukiwarka gier oraz serwerów społeczności Szwagiery.pl.">
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <meta name="theme-color" content="#120c08">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .search-container {
+            width: 90%;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        .game-badge {
+            display: inline-block;
+            background: var(--border-color);
+            color: var(--gold-light);
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .no-results {
+            color: var(--text-muted);
+            text-align: center;
+            grid-column: 1 / -1;
+            padding: 40px 20px;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="logo.jpg" alt="Szwagiery.pl Logo">
+            </a>
+        </div>
+        <a href="index.html" class="back-link">&larr; Wróć do Strony Główniej</a>
+        <h1>Katalog Gier</h1>
+        <p class="subtitle">Wyszukaj i zagraj w gry naszej społeczności</p>
+        <div class="divider"></div>
+    </header>
+
+    <!-- Wyszukiwarka gier -->
+    <div class="search-container">
+        <label class="field-label" for="gameSearch">Wyszukaj grę</label>
+        <input type="text" id="gameSearch" placeholder="🔍 Szukaj po nazwie, gatunku lub tagach..." autocomplete="off">
+    </div>
+
+    <!-- Lista gier wyrenderowana z JavaScript -->
+    <main class="grid" id="gamesGrid" style="grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); max-width: 1200px;"></main>
+
+    <div class="footer-note">
+        Napędzane przez <a href="#">Szwagiery.pl</a> &copy; 2026
+    </div>
+
+    <script>
+    // =========================================================================
+    // TUTAJ DODAJESZ NOWE GRY DO LISTY:
+    // Dodaj nowy obiekt {} do poniższej tablicy GAMES.
+    // =========================================================================
+    const GAMES = [
+        {
+            title: "LEMUR HISTORIA",
+            category: "Strategia / HTML5",
+            description: "Przeglądarkowa gra strategiczna. Kieruj państwem, rozwijaj gospodarkę i prowadź dyplomację.",
+            url: "index.html", 
+            btnText: "Zagraj teraz",
+            tags: ["strategia", "geopolityka", "historia", "html5", "lemur"]
+        },
+        {
+            title: "Lemurcraft",
+            category: "Serwer Minecraft",
+            description: "Oficjalny serwer Minecraft społeczności (Box PVP, Survival oraz SkyBlock).",
+            url: "https://lemurcraft.pl",
+            btnText: "Odwiedź stronę",
+            tags: ["minecraft", "pvp", "boxpvp", "survival", "skyblock", "serwer"]
+        }
+    ];
+
+    const gamesGrid = document.getElementById('gamesGrid');
+    const searchInput = document.getElementById('gameSearch');
+
+    function renderGames(filterText = '') {
+        gamesGrid.innerHTML = '';
+        const query = filterText.toLowerCase().trim();
+
+        const filteredGames = GAMES.filter(game => {
+            if (!query) return true;
+            const matchTitle = game.title.toLowerCase().includes(query);
+            const matchCategory = game.category.toLowerCase().includes(query);
+            const matchDesc = game.description.toLowerCase().includes(query);
+            const matchTags = game.tags && game.tags.some(tag => tag.toLowerCase().includes(query));
+            return matchTitle || matchCategory || matchDesc || matchTags;
+        });
+
+        if (filteredGames.length === 0) {
+            gamesGrid.innerHTML = '<div class="no-results">Nie znaleziono gier pasujących do wyszukiwania.</div>';
+            return;
+        }
+
+        filteredGames.forEach(game => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            
+            const isExternal = game.url.startsWith('http://') || game.url.startsWith('https://');
+            const targetAttr = isExternal ? 'target="_blank" rel="noopener noreferrer"' : '';
+
+            card.innerHTML = `
+                <div>
+                    <span class="game-badge">${game.category}</span>
+                    <h3>${game.title}</h3>
+                    <p>${game.description}</p>
+                </div>
+                <a href="${game.url}" ${targetAttr} class="btn">${game.btnText || 'Zagraj'}</a>
+            `;
+            gamesGrid.appendChild(card);
+        });
+    }
+
+    // Wyrenderowanie początkowej listy
+    renderGames();
+
+    // Filtrowanie na żywo w trakcie wpisywania tekstu
+    searchInput.addEventListener('input', (e) => {
+        renderGames(e.target.value);
+    });
+    </script>
+
+</body>
+</html>
