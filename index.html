@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Szwagiery.pl - Centrum Dowodzenia</title>
-    <meta name="description" content="Oficjalny portal i darmowe usługi dla społeczności Szwagiery.pl - generator subdomen, skracacz linków i galeria.">
-    <meta property="og:title" content="Szwagiery.pl - Centrum Dowodzenia">
-    <meta property="og:description" content="Oficjalny portal i darmowe usługi dla społeczności Szwagiery.pl.">
+    <title>Szwagiery.pl - Strefa Gier</title>
+    <meta name="description" content="Oficjalny portal i katalog gier społeczności Szwagiery.pl.">
+    <meta property="og:title" content="Szwagiery.pl - Strefa Gier">
+    <meta property="og:description" content="Zagraj w gry przeglądarkowe i sprawdź serwery społeczności Szwagiery.pl.">
     <meta property="og:image" content="logo.jpg">
     <meta property="og:type" content="website">
     <link rel="icon" type="image/jpeg" href="logo.jpg">
@@ -20,142 +20,24 @@
             <img src="logo.jpg" alt="Szwagiery.pl Logo">
         </div>
         <h1>SZWAGIERY.PL</h1>
-        <p class="subtitle">Oficjalny portal i darmowe usługi dla społeczności</p>
+        <p class="subtitle">Oficjalny portal i katalog gier społeczności</p>
         <div class="divider"></div>
     </header>
 
-    <div class="grid">
-        <!-- Generowanie Subdomen -->
+    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); max-width: 900px;">
+        <!-- Sekcja Gier -->
         <div class="card">
             <div>
-                <h3>🌐 Wygeneruj Subdomenę</h3>
-                <p>Wpisz swoją nazwę oraz IP serwera, aby natychmiast utworzyć subdomenę w <strong>szwagiery.pl</strong>:</p>
-
-                <form id="subdomainForm" class="form-group" novalidate>
-                    <label class="field-label" for="subdomain">Nazwa subdomeny</label>
-                    <input type="text" id="subdomain" name="subdomain" placeholder="np. stasiu" required
-                           pattern="[a-zA-Z0-9-]{1,63}" autocomplete="off">
-                    <div class="field-error" id="subdomainError"></div>
-
-                    <label class="field-label" for="ip">Adres IP serwera</label>
-                    <input type="text" id="ip" name="ip" placeholder="np. 1.2.3.4" required
-                           inputmode="decimal" autocomplete="off">
-                    <div class="field-error" id="ipError"></div>
-
-                    <button type="submit" class="btn" id="subdomainSubmit">Stwórz subdomenę</button>
-                </form>
-                <div id="responseMsg" role="status" aria-live="polite"></div>
+                <h3>🎮 Strefa Gier & Serwery</h3>
+                <p>Przeglądaj naszą kolekcję gier przeglądarkowych, projekty strategiczne oraz serwery społecznościowe.</p>
             </div>
-        </div>
-
-        <!-- Skracacz Linków -->
-        <div class="card">
-            <div>
-                <h3>🔗 Skracacz Linków</h3>
-                <p>Skracaj długie adresy WWW i generuj proste odnośniki w domenie Szwagiery.pl dla swojej społeczności.</p>
-            </div>
-            <button type="button" class="btn btn-soon" disabled title="Funkcja w przygotowaniu">Wkrótce dostępne</button>
-        </div>
-
-        <!-- LemurHost -->
-        <div class="card">
-            <div>
-                <h3>⚡ Partnerstwo & Hosting</h3>
-                <p>Szukasz niezawodnej infrastruktury pod serwery gier lub własne projekty? Sprawdź pełną ofertę.</p>
-            </div>
-            <a href="https://lemurhost.pl" target="_blank" rel="noopener noreferrer" class="btn">Odwiedź LemurHost.pl</a>
-        </div>
-
-        <!-- Szwagierowe Rozrywki -->
-        <div class="card">
-            <div>
-                <h3>🎬 Szwagierowe Rozrywki</h3>
-                <p>Zdjęcia i filmy z prywatnego archiwum i folderu media.</p>
-            </div>
-            <a href="media.html" class="btn">Otwórz Media</a>
+            <a href="gry.html" class="btn">Otwórz katalog gier</a>
         </div>
     </div>
 
     <div class="footer-note">
-        Napędzane przez <a href="#">Szwagiery.pl</a> & <a href="https://lemurhost.pl" target="_blank" rel="noopener noreferrer">LemurHost.pl</a> &copy; 2026
+        Napędzane przez <a href="#">Szwagiery.pl</a> &copy; 2026
     </div>
-
-    <script>
-    const SUBDOMAIN_API_URL = 'https://TWOJE-API.przyklad.pl/api/create-subdomain';
-    const SUBDOMAIN_PATTERN = /^[a-zA-Z0-9-]{1,63}$/;
-    const IP_PATTERN = /^(\d{1,3}\.){3}\d{1,3}$/;
-
-    function isValidIPv4(value) {
-        if (!IP_PATTERN.test(value)) return false;
-        return value.split('.').every(part => Number(part) >= 0 && Number(part) <= 255);
-    }
-
-    const form = document.getElementById('subdomainForm');
-    const submitBtn = document.getElementById('subdomainSubmit');
-    const msg = document.getElementById('responseMsg');
-    const subdomainInput = document.getElementById('subdomain');
-    const ipInput = document.getElementById('ip');
-    const subdomainError = document.getElementById('subdomainError');
-    const ipError = document.getElementById('ipError');
-
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const subdomain = subdomainInput.value.trim();
-        const ip = ipInput.value.trim();
-
-        let valid = true;
-        subdomainError.textContent = '';
-        ipError.textContent = '';
-        subdomainInput.classList.remove('invalid');
-        ipInput.classList.remove('invalid');
-
-        if (!SUBDOMAIN_PATTERN.test(subdomain)) {
-            subdomainError.textContent = 'Dozwolone: litery, cyfry, myślnik (bez spacji).';
-            subdomainInput.classList.add('invalid');
-            valid = false;
-        }
-        if (!isValidIPv4(ip)) {
-            ipError.textContent = 'Podaj poprawny adres IPv4, np. 1.2.3.4.';
-            ipInput.classList.add('invalid');
-            valid = false;
-        }
-        if (!valid) return;
-
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Tworzenie...';
-        msg.textContent = 'Łączenie z Cloudflare...';
-        msg.style.color = 'var(--gold-primary)';
-
-        const formData = new FormData();
-        formData.append('subdomain', subdomain);
-        formData.append('ip', ip);
-
-        try {
-            const res = await fetch(SUBDOMAIN_API_URL, {
-                method: 'POST',
-                body: formData
-            });
-
-            const data = await res.json();
-
-            if (res.ok) {
-                msg.textContent = data.message || 'Subdomena utworzona.';
-                msg.style.color = 'var(--success)';
-                form.reset();
-            } else {
-                msg.textContent = data.detail || 'Wystąpił błąd podczas tworzenia.';
-                msg.style.color = 'var(--error)';
-            }
-        } catch (err) {
-            msg.textContent = 'Nie udało się połączyć z API. Sprawdź adres SUBDOMAIN_API_URL w kodzie strony.';
-            msg.style.color = 'var(--gold-light)';
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Stwórz subdomenę';
-        }
-    });
-    </script>
 
 </body>
 </html>
